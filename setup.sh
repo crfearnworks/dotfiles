@@ -9,6 +9,9 @@ sudo apt-get update
 # Install dependencies
 sudo apt-get install -y zsh curl wget
 
+# Make zsh your default
+chsh -s $(which zsh)
+
 # Install Oh My Zsh
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
