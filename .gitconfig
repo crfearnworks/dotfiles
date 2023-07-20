@@ -1,5 +1,5 @@
-[safe]
-	directory = /dungeondriver/dungeondriver
+# This is Git's per-user configuration file.
 [user]
+# Please adapt and uncomment the following lines:
 	name = Charlie Rogers
-	email = charlie.rogers@fearnworks.com
+	email = 128843549+crfearnworks@users.noreply.github.com
