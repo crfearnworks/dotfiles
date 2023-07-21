@@ -19,12 +19,13 @@ done
 
 # Make zsh your default
 if [ "$SHELL" != "$(which zsh)" ]; then
-    chsh -s "$(which zsh)"
+    echo "Setting zsh as default shell..."
+    sudo chsh -s "$(which zsh)" "$(whoami)"
 fi
 
 # Install Oh My Zsh
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
-    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    RUNZSH=no sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
 
 # Install Powerlevel10k
@@ -49,5 +50,5 @@ fi
 ln -sf "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
 ln -sf "$DOTFILES_DIR/.p10k.zsh" "$HOME/.p10k.zsh"
 
-# Source new shell
-source "$HOME/.zshrc"
+# Inform the user to start a new shell
+echo "Setup completed. Please start a new Zsh session to load the new settings."
