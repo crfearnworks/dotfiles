@@ -1,25 +1,53 @@
 #!/bin/bash
 
-# This is a script to set up an Ubuntu 22.04 WSL environment
-# to use the dotfiles in this repo.
+# Variables
+DOTFILES_REPO="https://github.com/yourusername/dotfiles.git"
+DOTFILES_DIR="$HOME/.dotfiles"
+DEPENDENCIES=(zsh curl wget)
 
 # Update packages
 sudo apt-get update
 
 # Install dependencies
-sudo apt-get install -y zsh curl wget
+for pkg in "${DEPENDENCIES[@]}"; do
+    if dpkg -l | grep -q "$pkg"; then
+        echo "$pkg already installed"
+    else
+        sudo apt-get install -y "$pkg"
+    fi
+done
 
 # Make zsh your default
-chsh -s $(which zsh)
+if [ "$SHELL" != "$(which zsh)" ]; then
+    chsh -s "$(which zsh)"
+fi
 
 # Install Oh My Zsh
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
 
 # Install Powerlevel10k
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-
+if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+fi
 
 # Nerd Fonts - Hack font
-git clone --depth 1 https://github.com/ryanoasis/nerd-fonts
-cd nerd-fonts
-./install.sh CascadiaCode
+if [ ! -d "$HOME/nerd-fonts" ]; then
+    git clone --depth 1 https://github.com/ryanoasis/nerd-fonts
+    cd nerd-fonts
+    ./install.sh Hack
+    cd ..
+fi
+
+# Clone your dotfiles repo
+if [ ! -d "$DOTFILES_DIR" ]; then
+    git clone "$DOTFILES_REPO" "$DOTFILES_DIR"
+fi
+
+# Set up symlinks
+ln -sf "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
+ln -sf "$DOTFILES_DIR/.p10k.zsh" "$HOME/.p10k.zsh"
+
+# Source new shell
+source "$HOME/.zshrc"
