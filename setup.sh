@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Variables
-DOTFILES_REPO="https://github.com/yourusername/dotfiles.git"
+DOTFILES_REPO="https://github.com/crfearnworks/dotfiles.git"
 DOTFILES_DIR="$HOME/.dotfiles"
 DEPENDENCIES=(zsh curl wget)
 
